@@ -2,6 +2,25 @@
 const usersStorage = require("../storages/usersStorage");
 const { body, validationResult, matchedData } = require("express-validator");
 
+exports.usersListGet = (req, res) => {
+  res.render("index", {
+    title: "User list",
+    users: usersStorage.getUsers(),
+  });
+};
+
+exports.usersCreateGet = (req, res) => {
+  res.render("createUser", {
+    title: "Create user",
+  });
+};
+
+exports.usersCreatePost = (req, res) => {
+  const { firstName, lastName } = req.body;
+  usersStorage.addUser({ firstName, lastName });
+  res.redirect("/");
+};
+
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
 
@@ -31,22 +50,34 @@ exports.usersCreatePost = [
   }
 ];
 
-
-exports.usersListGet = (req, res) => {
-  res.render("index", {
-    title: "User list",
-    users: usersStorage.getUsers(),
+exports.usersUpdateGet = (req, res) => {
+  const user = usersStorage.getUser(req.params.id);
+  res.render("updateUser", {
+    title: "Update user",
+    user: user,
   });
 };
 
-exports.usersCreateGet = (req, res) => {
-  res.render("createUser", {
-    title: "Create user",
-  });
-};
+exports.usersUpdatePost = [
+  validateUser,
+  (req, res) => {
+    const user = usersStorage.getUser(req.params.id);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("updateUser", {
+        title: "Update user",
+        user: user,
+        errors: errors.array(),
+      });
+    }
+    const { firstName, lastName } = matchedData(req);
+    usersStorage.updateUser(req.params.id, { firstName, lastName });
+    res.redirect("/");
+  }
+];
 
-exports.usersCreatePost = (req, res) => {
-  const { firstName, lastName } = req.body;
-  usersStorage.addUser({ firstName, lastName });
+// Tell the server to delete a matching user, if any. Otherwise, respond with an error.
+exports.usersDeletePost = (req, res) => {
+  usersStorage.deleteUser(req.params.id);
   res.redirect("/");
 };
