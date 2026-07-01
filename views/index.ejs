@@ -20,6 +20,13 @@
       <% }); %>
     <% } %>
   </ul>
+  
+  <h2>Search Users</h2>
+  <form action="/search" method="GET">
+    <input type="text" name="search_query" placeholder="search by email" required>
+   <button type="submit">Search</button>
+  </form>
+  
   <a href="/create">Create a user</a>
 </body>
 </html>

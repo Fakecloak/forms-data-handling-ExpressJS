@@ -21,6 +21,17 @@ exports.usersCreatePost = (req, res) => {
   res.redirect("/");
 };
 
+exports.usersSearchGet =(req,res) => {
+  const { search_query } = req.query;
+
+  const users = usersStorage.getUsers().filter(user=> user.email === search_query);
+  res.render("search",{
+    title: "Search Results",
+    users,
+    search_query,
+  })
+
+}
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
 
