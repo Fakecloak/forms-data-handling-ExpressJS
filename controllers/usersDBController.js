@@ -90,3 +90,14 @@ exports.usersUpdatePost = [
 
     }
 ];
+
+exports.usersDeletePost = async (req, res) => {
+    const userId = req.params.id; 
+
+    if(!userId){
+        return res.status(404).send("User not found");
+    }
+
+    await db.deleteUser(userId);
+    res.redirect("/");
+}

@@ -12,6 +12,6 @@ usersDbRouter.post("/create", usersDBController.usersCreatePost);
 usersDbRouter.get("/:id/update", usersDBController.usersUpdateGet);
 usersDbRouter.post("/:id/update", usersDBController.usersUpdatePost);
 
-// usersRouter.post("/:id/delete", usersDBController.usersDeletePost);
+usersDbRouter.post("/:id/delete", usersDBController.usersDeletePost);
 
 module.exports = usersDbRouter; 
