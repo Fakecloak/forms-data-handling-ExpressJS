@@ -1,6 +1,6 @@
 const db = require("../db/queries");
 const {matchedData, validationResult, body} = require("express-validator");
- 
+
 exports.usersListGet = async (req, res)=> {
     const users = await db.getUsers();
 
@@ -16,6 +16,20 @@ exports.usersCreateGet = (req, res) => {
         title: "Create User",
     });
 };
+
+exports.usersSearchGet = async (req, res) => {
+    const {search_query} = req.query;
+
+    const users = await db.searchUsers(search_query);
+
+    res.render("search", {
+        title: "Search Results",
+        users,
+        search_query,
+    })
+
+}
+
 
 const validateUser = [
   body("firstName").notEmpty().trim()

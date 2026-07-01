@@ -55,10 +55,17 @@ async function deleteUser(id){
     )
 }
 
+async function searchUsers(search_query){
+    const {rows} = await pool.query(
+        `SELECT * FROM users WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1`, [`%${search_query}%`]
+    )
+    return rows;
+}
 module.exports = {
     getUsers,
     getUserById,
     addUser,
     updateUser,
     deleteUser,
+    searchUsers,
 };
